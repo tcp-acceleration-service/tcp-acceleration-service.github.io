@@ -1,0 +1,32 @@
+<h2>Overview</h2>
+
+<p>TAS is a drop-in highly CPU efficient and scalable TCP acceleration service for
+multi-tenant environments.</p>
+
+<h3>Features</h3>
+
+<ul>
+  <li>No additional NIC hardware required</li>
+  <li>Compatible with existing applications that use sockets</li>
+  <li>Userspace OS service using dedicated cores for packet processing</li>
+  <li>Leverages benefits and flexibility of kernel bypass with better
+    protection</li>
+</ul>
+
+<h3>Results</h3>
+
+<p>For small remote procedure calls (RPCs):</p>
+<ul>
+  <li>Throughput improved by 6x over Linux, comparable to
+    kernel-bypass TCP stacks that do not provide protection or sockets.</li>
+  <li>Tail latency up to 5.8x lower than Linux and 2.3x lower than
+    kernel-bypass.</li>
+  <li>Scalable to 100K active connections without throughput degradation</li>
+  <li>Stable and fair distribution of bandwidth to connections under
+    congestion.</li>
+</ul>
+
+<h3>TAS is Open Source</h3>
+
+<p>We have released TAS under the MIT license. You can find the source code on
+<a href="https://github.com/tcp-acceleration-service/tas">Github</a>.

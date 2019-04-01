@@ -1,0 +1,42 @@
+<h2>Techniques</h2>
+
+<h3>1. Dedicated Cores for TCP</h3>
+<p>Unlike conventional network stacks that share CPU cores between the
+application and TCP processing, we move TCP processing to a dedicated set of
+cores. Applications communicate asynchronously with TAS through in-memory
+queues.  This split provides two benefits: 1) Full cache isolation between
+applications and TAS for data and instruction caches, TLB and branch predictors,
+avoiding cache pollution in either direction.  2) Applications and TCP
+processing operate in parallel, thereby reducing tail latency. </p>
+
+<div class="img-large">
+  <img src="images/structure_cores.svg" alt="Dedicated Cores in TAS" />
+</div>
+
+
+<h3>2. Separate Fast Path and Slow Path</h3>
+<p>We further separate TCP processing into a streamlined fast-path that performs
+all per packet operations, a slow path for less frequent and periodic tasks such
+as connection establishment and timeouts, and a small application library that
+provides the sockets interface. The fast path minimizes the CPU cycles required
+to receive and transmit TCP packets and because of its simplified nature is
+enables additional optimizations, such as careful cache management and
+simplified control flow.</p>
+
+<div class="img-large">
+  <img src="images/structure_split.svg" alt="Fast Path and Slow Path Split in
+  TAS" />
+</div>
+
+
+<h3>3. Minimal Connection State</h3>
+<p>Splitting out a separate fast path, also allows us to minimize per-connection
+state. In TAS, the connection state used by the fast path amounts to two cache
+lines per connections consisting of a flat set of integer fields (no complicated
+data structures). As a result, TAS scales to large numbers of connections.</p>
+
+
+<h3>4. Centralized Packet Scheduling</h3>
+<p>We schedule TCP packet transmissions centrally and with precise timing. This
+allows TAS to enforce per-flow fairness under congestion and keep tail latency
+low even with large numbers of connections.</p>
